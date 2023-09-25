@@ -1,0 +1,13 @@
+{
+	"channels": {
+		"moderation": "id-goes-here"
+	},
+	"categories": {
+		"tickets": "id-goes-here",
+		"archives": "id-goes-here"
+	},
+	"roles": {
+		"moderator": "id-goes-here",
+		"administrator": "id-goes-here"
+	}
+}

@@ -1,0 +1,22 @@
+{
+  "name": "astreval-bot",
+  "version": "1.0.0",
+  "description": "astreval's bot",
+  "main": "index.ts",
+  "scripts": {
+    "start": "node build/index.js"
+  },
+  "author": "Souleymeine",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.5.6",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "discord": "^0.8.2",
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1",
+    "module_name": "^1.0.0",
+    "prompt-sync": "^4.2.0"
+  }
+}
