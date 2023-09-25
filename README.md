@@ -1,3 +1,3 @@
-# astraval-bot
+# astreval-bot
 
 Astreval's bot repository
