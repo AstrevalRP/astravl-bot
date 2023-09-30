@@ -1,4 +1,3 @@
-// see discord.js doc
 import { REST, Routes } from 'discord.js';
 import * as dotenv from 'dotenv';
 const prompt = require("prompt-sync")({sigint:true});

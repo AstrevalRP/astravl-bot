@@ -1,4 +1,3 @@
-// Code from the discord.js doc
 import { REST, Routes } from 'discord.js';
 import * as dotenv from 'dotenv';
 import fs = require('fs');
