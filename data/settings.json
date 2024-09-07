@@ -1,12 +1,15 @@
 {
 	"channels": {
-		"moderation": "id-goes-here"
+		"moderation": "id-goes-here",
+		"welcome": "id-goes-here",
+		"goodbye": "id-goes-here"
 	},
 	"categories": {
 		"tickets": "id-goes-here",
 		"archives": "id-goes-here"
 	},
 	"roles": {
+		"staff": "id-goes-here",
 		"moderator": "id-goes-here",
 		"administrator": "id-goes-here"
 	}
