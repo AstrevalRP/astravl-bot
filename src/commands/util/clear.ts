@@ -1,4 +1,4 @@
-import { CommandInteraction, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
+import { CommandInteraction, PermissionFlagsBits, SlashCommandBuilder, TextChannel } from "discord.js";
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -15,9 +15,9 @@ module.exports = {
     async execute(interaction : CommandInteraction) {
         await interaction.deferReply({ ephemeral: true })
             .then(async () => {
-                await interaction.channel.bulkDelete(interaction.options.get('amount').value as number);
+                await (interaction.channel as TextChannel).bulkDelete(interaction.options.get('amount')!.value as number);
             }).then(async () => {
-                await interaction.editReply({ content: `${interaction.options.get('amount').value} messages ont été supprimés :white_check_mark:` });
+                await interaction.editReply({ content: `${interaction.options.get('amount')!.value} messages ont été supprimés :white_check_mark:` });
             });
     }
 };

@@ -1,131 +1,74 @@
-import { ActionRowBuilder, CacheType, ChannelSelectMenuBuilder, ChannelSelectMenuInteraction, ChannelType, CommandInteraction, ComponentType, EmbedBuilder, PermissionFlagsBits, RoleSelectMenuBuilder, RoleSelectMenuInteraction, SlashCommandBuilder, channelMention, roleMention } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, channelMention, ChannelType, Colors, CommandInteraction, EmbedBuilder, PermissionFlagsBits, roleMention, SlashCommandBuilder } from "discord.js";
 
-let selectionComplete : boolean = false;
-let moderationChannelId : string;
-let ticketsCategoryId : string;
-let archivesCategoryId : string;
-let moderatorRoleId: string;
-let administratorRoleId: string;
+let staffRoleId : string 		 = "id-goes-here";
+let moderatorRoleId : string 	 = "id-goes-here";
+let adminRoleId : string 		 = "id-goes-here";
+let moderationChannelId : string = "id-goes-here";
+let welcomeChannelId : string 	 = "id-goes-here";
+let goodbyeChannelId : string 	 = "id-goes-here";
+let ticketCategoryId : string 	 = "id-goes-here";
+let archivesCategoryId : string  = "id-goes-here";
 
-function setSelectionComplete(boolean: boolean) { selectionComplete = boolean; }
-function getSelectionComplete(): boolean { return selectionComplete; } 
-
-function getModerationChannelId(): string { return moderationChannelId; } 
-function getTicketsCategoryId(): string { return ticketsCategoryId; }
-function getArchivesCategoryId(): string { return archivesCategoryId; }
-function getModeratorRoleId(): string { return moderatorRoleId; }
-function getAdministratorRoleId(): string { return administratorRoleId; }
-
-function collectData(collected: ChannelSelectMenuInteraction<CacheType> | RoleSelectMenuInteraction<CacheType>) {
-    if (collected.values !== null) {
-        const originalEmbed = collected.message.embeds[0];
-        const originalMessage = collected.message;
-        
-        /**
-         * originalEmbed.fields[0] --> moderationChannelField
-         * originalEmbed.fields[1] --> ticketsCategoryField
-         * originalEmbed.fields[2] --> archivesCategoryField
-         * originalEmbed.fields[3] --> moderatorRoleField
-         * originalEmbed.fields[4] --> administratorRoleField
-        */
-
-        if (collected.customId === 'moderation-channel-select-menu') { 
-            moderationChannelId = collected.values[0];
-            originalEmbed.fields[0].value = channelMention(collected.values[0]); 
-            originalMessage.edit({ embeds: [originalEmbed] });
-        } else if (collected.customId === 'tickets-category-select-menu') { 
-            ticketsCategoryId = collected.values[0];
-            originalEmbed.fields[1].value = channelMention(collected.values[0]); 
-            originalMessage.edit({ embeds: [originalEmbed] });        
-        } else if (collected.customId === 'archives-category-select-menu') { 
-            archivesCategoryId = collected.values[0];
-            originalEmbed.fields[2].value = channelMention(collected.values[0]); 
-            originalMessage.edit({ embeds: [originalEmbed] });   
-        } else if (collected.customId === 'moderator-role-select-menu') { 
-            moderatorRoleId = collected.values[0];
-            originalEmbed.fields[3].value = roleMention(collected.values[0]); 
-            originalMessage.edit({ embeds: [originalEmbed] }); 
-        } else if (collected.customId === 'administrator-role-select-menu') { 
-            administratorRoleId = collected.values[0];
-            originalEmbed.fields[4].value = roleMention(collected.values[0]);
-            originalMessage.edit({ embeds: [originalEmbed] }); 
-        }
-
-        const complete = [moderationChannelId !== undefined,
-            ticketsCategoryId !== undefined,
-            archivesCategoryId !== undefined,
-            moderatorRoleId !== undefined,
-            administratorRoleId !== undefined].filter(el => el).length === 4
-
-        if (complete) { setSelectionComplete(true); }
-        else {setSelectionComplete(false); }
-    }
-}
+export function getStaffRoleId() : string { return staffRoleId; }
+export function getModeratorRoleId() : string { return moderatorRoleId; }
+export function getAdminRoleId() : string { return adminRoleId; }
+export function getModerationChannelId() : string { return moderationChannelId; }
+export function getWelcomeChannelId() : string { return welcomeChannelId; }
+export function getGoodbyeChannelId() : string { return goodbyeChannelId; }
+export function getTicketCategoryId() : string { return ticketCategoryId; }
+export function getArchivesCategoryId() : string { return archivesCategoryId; }
 
 module.exports = {
-    data: new SlashCommandBuilder()
+	// Getters
+	getStaffRoleId, getModeratorRoleId, getAdminRoleId, getModerationChannelId, getWelcomeChannelId, getGoodbyeChannelId, getTicketCategoryId, getArchivesCategoryId,
+
+	data: new SlashCommandBuilder()
         .setName('config')
         .setDescription('Permet de configurer les paramètres généraux du bot')
-        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+		.addRoleOption(roleOption => roleOption.setName('staff-role').setDescription('Le rôle correspondant au staff').setRequired(true))
+		.addRoleOption(roleOption => roleOption.setName('moderator-role').setDescription('Le rôle correspondant à la modération').setRequired(true))
+		.addRoleOption(roleOption => roleOption.setName('admin-role').setDescription("Le rôle correspondant à l'administration").setRequired(true))
+		.addChannelOption(channelOption => channelOption.setName('moderation-channel').setDescription("Le salon dans lequel seront envoyées les informations relatives à la modération").addChannelTypes(ChannelType.GuildText).setRequired(true))
+		.addChannelOption(channelOption => channelOption.setName('welcome-channel').setDescription("Le salon dans lequel les membres seront acceuillis").addChannelTypes(ChannelType.GuildText).setRequired(true))
+		.addChannelOption(channelOption => channelOption.setName('goodbye-channel').setDescription("Le salon dans lequel les les staffs setont notifié du départ d'un membre").addChannelTypes(ChannelType.GuildText).setRequired(true))
+		.addChannelOption(channelOption => channelOption.setName('ticket-category').setDescription("La catégorie dans laquelle seront créés les tickets").addChannelTypes(ChannelType.GuildCategory).setRequired(true))
+		.addChannelOption(channelOption => channelOption.setName('archives-category').setDescription("La catégorie dans laquelle les tickets seront déplacés après avoir été archivés").addChannelTypes(ChannelType.GuildCategory).setRequired(true)),
 
-    getSelectionComplete,
-    getModerationChannelId,
-    getTicketsCategoryId,
-    getArchivesCategoryId,
-    getModeratorRoleId,
-    getAdministratorRoleId,
-    
     async execute(interaction : CommandInteraction) {
-        const embed = new EmbedBuilder()
-            .setTitle('**__Configure le bot en remplissant les paramètres ci-dessous__**')
-            .setColor('Red')
-            .setFields(
-                {name: 'Salon modération', value: '-', inline: false}, 
-                {name: 'Catégorie tickets', value: '-', inline: false},
-                {name: 'Catégorie archives', value: '-', inline: false},
-                {name: 'Role modération', value: '-', inline: true},
-                {name: 'Role administration', value: '-', inline: true},
-            );
-        const moderationChannelSelectMenu = new ChannelSelectMenuBuilder()
-            .setCustomId('moderation-channel-select-menu')
-            .setChannelTypes(ChannelType.GuildText)
-            .setPlaceholder('Salon de la modération');
-        const ticketsCategorySelectMenu = new ChannelSelectMenuBuilder()
-            .setCustomId('tickets-category-select-menu')
-            .setChannelTypes(ChannelType.GuildCategory)
-            .setPlaceholder('Catégorie dans laquelle se trouveront les tickets');
-        const archivesCategorySelectMenu = new ChannelSelectMenuBuilder()
-            .setCustomId('archives-category-select-menu')
-            .setChannelTypes(ChannelType.GuildCategory)
-            .setPlaceholder('Catégorie des tickets archivés');
-        const moderatorRoleSelectMenu = new RoleSelectMenuBuilder()
-            .setCustomId('moderator-role-select-menu')
-            .setPlaceholder('Rôle des modérateurs');
-        const administratorRoleSelectMenu = new RoleSelectMenuBuilder()
-            .setCustomId('administrator-role-select-menu')
-            .setPlaceholder('Rôle des administrateurs');
-
-        const reply = await interaction.reply({ embeds: [embed], 
-            components: [
-                new ActionRowBuilder<ChannelSelectMenuBuilder>().addComponents(moderationChannelSelectMenu),
-                new ActionRowBuilder<ChannelSelectMenuBuilder>().addComponents(ticketsCategorySelectMenu),
-                new ActionRowBuilder<ChannelSelectMenuBuilder>().addComponents(archivesCategorySelectMenu),
-                new ActionRowBuilder<RoleSelectMenuBuilder>().addComponents(moderatorRoleSelectMenu),
-                new ActionRowBuilder<RoleSelectMenuBuilder>().addComponents(administratorRoleSelectMenu),
-            ]
-        });
-
-        // Collect every select menu, store their value and check if one of them is empty
-        const moderationChannelSelectMenuCollector = reply.createMessageComponentCollector({ componentType: ComponentType.ChannelSelect });
-        const ticketsCategorySelectMenuCollector = reply.createMessageComponentCollector({ componentType: ComponentType.ChannelSelect });
-        const archivesCategorySelectMenuCollector = reply.createMessageComponentCollector({ componentType: ComponentType.ChannelSelect });
-        const moderatorRoleSelectMenuCollector = reply.createMessageComponentCollector({ componentType: ComponentType.RoleSelect });
-        const administratorRoleSelectMenuCollector = reply.createMessageComponentCollector({ componentType: ComponentType.RoleSelect });
-
-        moderationChannelSelectMenuCollector.on('collect', collected => { collectData(collected); });
-        ticketsCategorySelectMenuCollector.on('collect', collected => { collectData(collected); });
-        archivesCategorySelectMenuCollector.on('collect', collected => { collectData(collected); });
-        moderatorRoleSelectMenuCollector.on('collect', collected => { collectData(collected); });
-        administratorRoleSelectMenuCollector.on('collect', collected => { collectData(collected); });
+		staffRoleId = interaction.options.get('staff-role')!.value!.toString();
+		moderatorRoleId = interaction.options.get('moderator-role')!.value!.toString();
+		adminRoleId = interaction.options.get('admin-role')!.value!.toString();
+		moderationChannelId = interaction.options.get('moderation-channel')!.value!.toString();
+		welcomeChannelId = interaction.options.get('welcome-channel')!.value!.toString();
+		goodbyeChannelId = interaction.options.get('goodbye-channel')!.value!.toString();
+		ticketCategoryId = interaction.options.get('ticket-category')!.value!.toString();
+		archivesCategoryId = interaction.options.get('archives-category')!.value!.toString();
+		
+		interaction.reply({ 
+			embeds: [new EmbedBuilder()
+				.setTitle('Voici les paramètres séléctionnés.')
+				.setColor(Colors.Green)
+				.setFields(
+					{ name : 'Rôle Staff', value : roleMention(staffRoleId), inline: true },
+					{ name : 'Rôle Modération', value : roleMention(moderatorRoleId), inline: true },
+					{ name : 'Rôle Admin', value : roleMention(adminRoleId), inline: true },
+					{ name : 'Catégorie Ticket', value : channelMention(ticketCategoryId), inline: true },
+					{ name : 'Catégorie Archives', value : channelMention(archivesCategoryId), inline: true },
+					{ name : 'Salon Modération', value : channelMention(moderationChannelId), inline: true },
+					{ name : 'Salon de Bienvenue', value : channelMention(welcomeChannelId), inline: true },
+					{ name : `Salon Bybye :'(`, value : channelMention(goodbyeChannelId), inline: true }
+				)],
+			components: [new ActionRowBuilder<ButtonBuilder>().addComponents(
+					new ButtonBuilder()
+						.setLabel('Confirmer')
+						.setCustomId('confirm-configure-bot')
+						.setStyle(ButtonStyle.Danger), 
+					new ButtonBuilder()
+						.setLabel('Annuler')
+						.setCustomId('cancel-configure-bot')
+						.setStyle(ButtonStyle.Secondary)
+				)]
+		});
     }
 };

@@ -4,16 +4,15 @@ let selectionComplete : boolean = false;
 let reportAndHelpChannelId : string;
 let recruitmentChannelId : string;
 
-function setSelectionComplete(boolean: boolean) { selectionComplete = boolean; }
-function getSelectionComplete(): boolean { return selectionComplete; } 
-
-function getReportAndHelpChannelId(): string { return reportAndHelpChannelId; } 
-function getRecruitmentChannelId(): string { return recruitmentChannelId; }
+export function setSelectionComplete(boolean: boolean) { selectionComplete = boolean; }
+export function getSelectionComplete(): boolean { return selectionComplete; } 
+export function getReportAndHelpChannelId(): string { return reportAndHelpChannelId; } 
+export function getRecruitmentChannelId(): string { return recruitmentChannelId; }
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('initialize-tickets')
-        .setDescription('Envoie un message permettant d\'initialiser les différents tickets.')
+        .setName('config-tickets')
+        .setDescription("Envoie un message permettant d'initialiser les différents tickets dans les salons donnés.")
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
     
     getSelectionComplete,

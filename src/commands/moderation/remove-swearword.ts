@@ -18,7 +18,7 @@ module.exports = {
 
     async execute(interaction : CommandInteraction) {
         const blackList : string[] = JSON.parse(fs.readFileSync(path.join(__dirname, blackListPath), {encoding: 'utf8'}));
-        const word : string = interaction.options.get('word').value.toString().toLowerCase();
+        const word : string = interaction.options.get('word')!.value!.toString().toLowerCase();
         
         if (blackList.some(item => item === word)) {
             let deletedWords = [];

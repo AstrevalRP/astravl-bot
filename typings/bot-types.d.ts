@@ -1,11 +1,13 @@
 import { Collection } from 'discord.js'
 
+
 declare global {
     namespace NodeJS {
         interface ProcessEnv {
             TOKEN: string
             CLIENT_ID: string
-            GUILD_ID : string
+            GUILD_ID: string
+			DEBUG_MODE: string
         }
     }
 }

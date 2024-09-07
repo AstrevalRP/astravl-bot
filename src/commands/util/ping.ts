@@ -7,10 +7,10 @@ module.exports = {
 
     async execute(interaction : CommandInteraction) {
         const sentTime = Date.now();
-        await interaction.deferReply();
+		await interaction.deferReply({ ephemeral: true });
         await interaction.followUp({ embeds: [new EmbedBuilder()
-            .setColor('#1a1a1a')
-            .setTitle(`Pong! ${interaction.createdTimestamp - sentTime}ms`)] 
+				.setColor('#1a1a1a')
+				.setTitle(`Pong! ${interaction.createdTimestamp - sentTime}ms`)],
         });
     },
 };
