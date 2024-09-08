@@ -6,11 +6,11 @@ module.exports = {
         .setDescription('Indique la latence du bot'),
 
     async execute(interaction : CommandInteraction) {
-        const sentTime = Date.now();
+        const sentTime = new Date();
 		await interaction.deferReply({ ephemeral: true });
         await interaction.followUp({ embeds: [new EmbedBuilder()
 				.setColor('#1a1a1a')
-				.setTitle(`Pong! ${interaction.createdTimestamp - sentTime}ms`)],
+				.setTitle(`Pong! ${new Date().getTime() - sentTime.getTime()}ms`)],
         });
     },
 };
