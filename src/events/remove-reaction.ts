@@ -7,11 +7,13 @@ const SAVED_MESSAGES_PATH = '../../data/saved_messages.json'
 module.exports = {
 	name: Events.MessageReactionRemove,
 	async execute(reaction : MessageReaction, user: User) {
+		if (user.bot) return
+
 		const message = reaction.message;
 		const savedMessages = JsonUtils.getJsonContent(SAVED_MESSAGES_PATH) as RoleMessageObject[];
 
 		const isRoleConfigMessage = message.embeds[0].title?.startsWith('Configuration');
-		const isRoleMessage = message.embeds[0].title?.startsWith('Clique');
+		const isRoleMessage = message.embeds[0].footer?.text.startsWith('Tu peux aussi retirer ta réaction');
 
 		if (savedMessages.some(roleMessage => roleMessage.roleMessage.id === message.id)) {
 			if (isRoleConfigMessage) {
