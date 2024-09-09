@@ -48,13 +48,13 @@ function registerEvents() {
 	}
 }
 
-registerCommands();
+dotenv.config();
+
 registerEvents();
-commandRegister.deployCommands;
+registerCommands();
 
 client.once(Events.ClientReady, c => {
 	console.log(`Ready! logged in as ${c.user.tag}`);
 });
 
-dotenv.config();
 client.login(process.env.TOKEN);
